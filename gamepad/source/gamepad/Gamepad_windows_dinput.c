@@ -112,7 +112,7 @@ static LPDIRECTINPUT directInputInterface;
 static bool inited = false;
 static bool xInputAvailable;
 
-void Gamepad_init() {
+_WINEXPORT void Gamepad_init() {
 	if (!inited) {
 		HRESULT result;
 		HMODULE module;
@@ -172,7 +172,7 @@ static void disposeDevice(struct Gamepad_device * deviceRecord) {
 	free(deviceRecord);
 }
 
-void Gamepad_shutdown() {
+_WINEXPORT void Gamepad_shutdown() {
 	unsigned int deviceIndex;
 	
 	if (inited) {
@@ -186,11 +186,11 @@ void Gamepad_shutdown() {
 	}
 }
 
-unsigned int Gamepad_numDevices() {
+_WINEXPORT unsigned int Gamepad_numDevices() {
 	return numDevices;
 }
 
-struct Gamepad_device * Gamepad_deviceAtIndex(unsigned int deviceIndex) {
+_WINEXPORT struct Gamepad_device * Gamepad_deviceAtIndex(unsigned int deviceIndex) {
 	if (deviceIndex >= numDevices) {
 		return NULL;
 	}
@@ -757,7 +757,7 @@ static void removeDevice(unsigned int deviceIndex) {
 	}
 }
 
-void Gamepad_detectDevices() {
+_WINEXPORT void Gamepad_detectDevices() {
 	HRESULT result;
 	DWORD xResult;
 	XINPUT_CAPABILITIES capabilities;
@@ -876,7 +876,7 @@ static void updatePOVAxisValues(struct Gamepad_device * device, unsigned int axi
 	updateAxisValueFloat(device, axisIndex + 1, y, timestamp);
 }
 
-void Gamepad_processEvents() {
+_WINEXPORT void Gamepad_processEvents() {
 	static bool inProcessEvents;
 	unsigned int deviceIndex, buttonIndex, axisIndex;
 	struct Gamepad_device * device;

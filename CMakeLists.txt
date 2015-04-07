@@ -7,6 +7,7 @@ set(files gamepad/source/gamepad/Gamepad_private.c)
 
 if (WIN32)
   set(files gamepad/source/gamepad/Gamepad_windows_dinput.c ${files})
+  add_definitions(-DWINDLL)
 elseif (APPLE)
   set(files gamepad/source/gamepad/Gamepad_macosx.c ${files})
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -framework IOKit -framework CoreFoundation")
