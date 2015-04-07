@@ -1,0 +1,3 @@
+[submodule "gamepad-sample"]
+	path = gamepad-sample
+	url = git@github.com:creationix/gamepad-sample.git
