@@ -1,34 +1,34 @@
-VERSION := $(shell node -e "console.log(require('./package.json').version)")
+LUAJIT_OS=$(shell luajit -e "print(require('ffi').os)")
+LUAJIT_ARCH=$(shell luajit -e "print(require('ffi').arch)")
+TARGET_DIR=$(LUAJIT_OS)-$(LUAJIT_ARCH)/
 
-.PHONY: default release
+ifeq ($(LUAJIT_OS), OSX)
+GAMEPAD_LIB=libgamepad.dylib
+else
+GAMEPAD_LIB=libgamepad.so
+endif
 
-# Add a default task so we don't release just because someone ran 'make'
-default:
-	@echo "Did you mean to release a new version?"
-	@echo "If so, run 'make release'."
+libs: build
+	cmake --build build --config Release
+	mkdir -p $(TARGET_DIR)
+	cp build/$(GAMEPAD_LIB) $(TARGET_DIR)
 
-release:
-	@echo "Creating release commit"
-	@git commit -a -m "Release version $(VERSION)"
+gamepad/src:
+	git submodule update --init gamepad
 
-	@echo "Tagging release $(VERSION)"
-	@git tag -m "$(VERSION)" v$(VERSION)
+build: gamepad/src
+	cmake -Bbuild -H. -GNinja
 
-	@echo "Pushing commit and tags to GitHub"
-	@git push
-	@git push --tags
+gamepad-sample/main.lua:
+	git submodule update --init gamepad-sample
 
-	@echo "Switching to osx-binaries branch"
-	@git checkout osx-binaries
+gamepad-sample/deps: gamepad-sample/main.lua
+	cd gamepad-sample && lit install
+	rm -rf gamepad-sample/deps/gamepad
+	ln -s ../.. gamepad-sample/deps/gamepad
 
-	@echo "Merging master into osx-binaries"
-	@git merge --no-ff --commit -m "Merge master into osx-binaries [publish binary]" master
+test: libs gamepad-sample/deps
+	LUVI_APP=gamepad-sample lit
 
-	@echo "Pushing osx-binaries"
-	@git push
-
-	@echo "Switching to master branch"
-	@git checkout master
-
-	@echo "Publishing to NPM"
-	@npm publish
+clean:
+	rm -rf build gamepad-sample/deps
