@@ -28,7 +28,7 @@ gamepad-sample/deps: gamepad-sample/main.lua
 	ln -s ../.. gamepad-sample/deps/gamepad
 
 test: libs gamepad-sample/deps
-	LUVI_APP=gamepad-sample lit
+	luvi gamepad-sample
 
 clean:
 	rm -rf build gamepad-sample/deps
