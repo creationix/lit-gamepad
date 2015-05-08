@@ -1,5 +1,6 @@
 local names = {
   ["Windows-x64"] = "gamepad.dll",
+  ["Linux-arm"] = "libgamepad.so",
   ["Linux-x64"] = "libgamepad.so",
   ["OSX-x64"] = "libgamepad.dylib",
 }

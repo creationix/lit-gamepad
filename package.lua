@@ -1,6 +1,6 @@
 return {
   name = "creationix/gamepad",
-  version = "1.1.0",
+  version = "1.1.1",
   homepage = "https://github.com/creationix/lit-gamepad",
   description = "FFI bindings to cross-platform gamepad library.",
   tags = {"ffi", "gamepad"},
